@@ -335,11 +335,13 @@ class CacheDialog(QtWidgets.QDialog):
                         item.setBackground(QtGui.QBrush(color))
 
 
-def showDialog(cacheManager, operationType, cache, parent=None):
+def showDialog(cacheManager, operationType, cache, parent=None, class_=CacheDialog):
+    assert class_ is None or issubclass(class_, CacheDialog),\
+        "class_ %s must be subclass of CacheDialog" % class_
     app = None
     if not QtWidgets.QApplication.instance():
         app = QtWidgets.QApplication(sys.argv)
-    w = CacheDialog(cacheManager, operationType, cache, parent)
+    w = class_(cacheManager, operationType, cache, parent)
     w.show()
     if app:
         sys.exit(app.exec_())
