@@ -196,7 +196,7 @@ class CacheDialog(QtWidgets.QDialog):
         self.table.verticalHeader().setDefaultSectionSize(32)
         self.table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.table.cellDoubleClicked.connect(
-            lambda r, c: self.cellDoubleClicked(
+            lambda r, c: self.doubleClicked(
                 self.table.item(r, self.tableColumns.index('Name')).cache)
         )
         self.table.setIconSize(QtCore.QSize(32, 32))
