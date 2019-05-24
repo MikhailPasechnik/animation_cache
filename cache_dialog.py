@@ -45,7 +45,7 @@ class CacheDialog(QtWidgets.QDialog):
 
         settings = cacheManager.getDefaultSettings()
 
-        if self.operationType == 'export':
+        if self.operationType == animation_cache.kExportCacheOp:
             self.cache = cache or []
             self.settings = settings
 
@@ -56,7 +56,7 @@ class CacheDialog(QtWidgets.QDialog):
             self.samples.valueChanged.connect(lambda v: self._settings.__setitem__('samples', v))
             self.padding.valueChanged.connect(lambda v: self._settings.__setitem__('padding', v))
 
-        elif self.operationType == 'import':
+        elif self.operationType == animation_cache.kImportCacheOp:
             self.cache = cache or []
             self.settings = settings
             self.doAllBtn.clicked.connect(self.doImport)
@@ -108,9 +108,9 @@ class CacheDialog(QtWidgets.QDialog):
 
     def refresh(self):
         self.searchEdit.setText('')
-        if self.operationType == 'export':
+        if self.operationType == animation_cache.kExportCacheOp:
             self.cache = self.cacheManager.getFactory().fromScene()
-        if self.operationType == 'import':
+        if self.operationType == animation_cache.kImportCacheOp:
             self.cache = self.cacheManager.getFactory().fromFile(self.settings['directory'])
 
     def getSelectedCache(self):
@@ -164,11 +164,14 @@ class CacheDialog(QtWidgets.QDialog):
         self.table.setColumnCount(len(self.tableColumns))
         self.settingsLayout = self.ui.settingsLayout
         self.settingsLayout.setAlignment(QtCore.Qt.AlignRight)
-        if self.operationType != 'export':
+        if self.operationType != animation_cache.kExportCacheOp:
+            modeName = 'Export' \
+                if animation_cache.kExportCacheOp == self.operationType \
+                else 'Import'
             self.doAllBtn.setText(
-                self.doAllBtn.text().replace('Export', self.operationType.capitalize()))
+                self.doAllBtn.text().replace('Export', modeName))
             self.doSelectedBtn.setText(
-                self.doSelectedBtn.text().replace('Export', self.operationType.capitalize()))
+                self.doSelectedBtn.text().replace('Export', modeName))
             for sw in [self.settingsLayout.itemAt(i).widget() for i in
                        range(self.settingsLayout.count())]:
                 sw.setEnabled(False)
@@ -238,8 +241,8 @@ class CacheDialog(QtWidgets.QDialog):
         typeItem = QtWidgets.QTableWidgetItem(c.type)
         self.table.setItem(row, column('Type'), typeItem)
 
-        if self.operationType == 'import':
-            importVariants = c.importVariants
+        if self.operationType == animation_cache.kImportCacheOp:
+            importVariants = self.getImportVariants(c)
             customFile = QtWidgets.QPushButton('+')
             customFile.setFocusPolicy(QtCore.Qt.NoFocus)
             customFile.setFixedWidth(25)
@@ -266,7 +269,7 @@ class CacheDialog(QtWidgets.QDialog):
                     self.onImportVariantChanged, c, variants
                 )
             )
-        elif self.operationType == 'export' and c.get('path'):
+        elif self.operationType == animation_cache.kExportCacheOp and c.get('path'):
             pathItem = QtWidgets.QTableWidgetItem(c.get('path'))
             self.table.setItem(row, column('Path'), pathItem)
 
