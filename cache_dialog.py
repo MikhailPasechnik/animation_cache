@@ -195,6 +195,14 @@ class CacheDialog(QtWidgets.QDialog):
             )
         self.table.verticalHeader().setDefaultSectionSize(32)
         self.table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.table.cellDoubleClicked.connect(
+            lambda r, c: self.cellDoubleClicked(
+                self.table.item(r, self.tableColumns.index('Name')).cache)
+        )
+        self.table.setIconSize(QtCore.QSize(32, 32))
+
+    def doubleClicked(self, cache):
+        pass
 
     def filterCache(self, text):
         """Filter assets displayed by currently selected asset type."""
@@ -235,7 +243,7 @@ class CacheDialog(QtWidgets.QDialog):
 
     def createItems(self, row, c):
         column = self.tableColumns.index
-        nameItem = QtWidgets.QTableWidgetItem(c['name'])
+        nameItem = QtWidgets.QTableWidgetItem(self.getName(c))
         nameItem.cache = c
         self.table.setItem(row, column('Name'), nameItem)
         typeItem = QtWidgets.QTableWidgetItem(c.type)
@@ -272,6 +280,27 @@ class CacheDialog(QtWidgets.QDialog):
         elif self.operationType == animation_cache.kExportCacheOp and c.get('path'):
             pathItem = QtWidgets.QTableWidgetItem(c.get('path'))
             self.table.setItem(row, column('Path'), pathItem)
+
+        icon = self.getIcon(c)
+        if icon:
+            assetThumbnail = QtWidgets.QTableWidgetItem()
+            assetThumbnail.setSizeHint(QtCore.QSize(32, 32))
+            assetThumbnail.setIcon(icon)
+            self.table.setItem(
+                row, self.tableColumns.index('Icon'), assetThumbnail
+            )
+
+    def getName(self, cache):
+        return cache['name']
+
+    def getImportVariants(self, cache):
+        return cache.importVariants
+
+    def getPath(self, cache):
+        return cache.get('path')
+
+    def getIcon(self, cache):
+        pass
 
     @staticmethod
     def onImportVariantChanged(c, comboBox, index):
