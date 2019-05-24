@@ -21,5 +21,14 @@ __status__ = 'development'
 
 kMergeCache = 0
 kOverwriteCache = 1
+kExportCacheOp = 2
+kImportCacheOp = 3
 
 DATA_FILE_NAME = 'animationdata2.json'
+
+from .cache_manager import CacheException
+from .cache_manager import CacheManager
+from .cache_manager import JsonCacheMixin
+from .cache import Cache
+from .cache import CacheFactory
+from .cache import CacheImporter

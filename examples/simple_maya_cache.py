@@ -1,12 +1,12 @@
 import pymel.core as pm
-import animation_cache.maya.maya_cache_manager as cm
-from animation_cache.maya.maya_cache import MayaCacheFactory
+import animation_cache as ac
+from animation_cache.maya import MayaCacheFactory, MayaCacheManager
 
 
-class SimpleCacheManager(cm.MayaCacheManager):
+class SimpleCacheManager(MayaCacheManager):
     @staticmethod
     def getDefaultExportPath():
-        return cm.MayaCacheManager.getDefaultExportPath()
+        return MayaCacheManager.getDefaultExportPath()
 
 
 class SimpleCacheFactory(MayaCacheFactory):
@@ -50,15 +50,10 @@ class SimpleCacheFactory(MayaCacheFactory):
 
 def showExportDialog():
     cacheManager = SimpleCacheManager(factory=SimpleCacheFactory)
-    cacheManager.showGui(
-        'export',
-        cache=SimpleCacheFactory.fromScene()
-    )
+    cacheManager.showGui(ac.kExportCacheOp, cache=SimpleCacheFactory.fromScene())
 
 
 def showImportDialog():
     cacheManager = SimpleCacheManager(factory=SimpleCacheFactory)
-    cacheManager.showGui(
-        'import',
-        cache=SimpleCacheFactory.fromFile(cacheManager.getDefaultExportPath())
-    )
+    cacheManager.showGui(ac.kImportCacheOp,
+                         cache=SimpleCacheFactory.fromFile(cacheManager.getDefaultExportPath()))
