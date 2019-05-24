@@ -115,13 +115,14 @@ class CacheManager(object):
     def getDefaultSettings(self):
         raise NotImplementedError
 
-    def showGui(self, operationType, cache=None, parent=None):
+    def showGui(self, operationType, cache=None, parent=None, class_=None):
         import animation_cache.cache_dialog
         return animation_cache.cache_dialog.showDialog(
             cacheManager=self,
             operationType=operationType,
             cache=cache,
-            parent=parent
+            parent=parent,
+            class_=class_,
         )
 
     def _importCache(self, cache, force, **kwargs):

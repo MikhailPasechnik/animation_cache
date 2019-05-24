@@ -141,7 +141,7 @@ class MayaCacheManager(CacheManager, JsonCacheMixin):
     def _postAlembicExport(self, cache, directory):
         """TODO: validate exported cache"""
 
-    def showGui(self, operationType, cache=None, parent=None):
+    def showGui(self, operationType, cache=None, parent=None, class_=None):
         # Parent dialog to maya main window
         if parent is None:
             import maya.OpenMayaUI
@@ -154,7 +154,5 @@ class MayaCacheManager(CacheManager, JsonCacheMixin):
                 long(maya.OpenMayaUI.MQtUtil.mainWindow()),
                 QtWidgets.QMainWindow) if maya.OpenMayaUI.MQtUtil.mainWindow() else None
         return super(MayaCacheManager, self).showGui(
-            operationType=operationType,
-            cache=cache,
-            parent=parent
+            operationType=operationType, cache=cache, parent=parent, class_=class_
         )
