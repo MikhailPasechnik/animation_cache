@@ -94,6 +94,8 @@ class MayaCacheFactory(CacheFactory):
                     nodes=entity,
                     name=entity[0].namespace().replace(':', '_') or entity[0].name().replace(':', '_')
                 )
+        else:
+            cache = super(MayaCacheFactory, cls).fromEntity(entity)
         return cache
 
     @classmethod
