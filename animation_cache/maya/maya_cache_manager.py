@@ -151,7 +151,7 @@ class MayaCacheManager(CacheManager, JsonCacheMixin):
                 import shiboken as shiboken2
             from animation_cache.vendor.Qt import QtWidgets
             parent = shiboken2.wrapInstance(
-                long(maya.OpenMayaUI.MQtUtil.mainWindow()),
+                int(maya.OpenMayaUI.MQtUtil.mainWindow()),
                 QtWidgets.QMainWindow) if maya.OpenMayaUI.MQtUtil.mainWindow() else None
         return super(MayaCacheManager, self).showGui(
             operationType=operationType,
