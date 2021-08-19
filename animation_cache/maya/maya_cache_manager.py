@@ -108,14 +108,23 @@ class MayaCacheManager(CacheManager, JsonCacheMixin):
         if kwargs.get('batchAbcExport'):
             # Export alembic cache
             alembicJobs = []
+            alembicJobKwargs = {}
+            alembicJobArgs = []
+            for k, v in kwargs.get('alembicJobKwargs', dict()).items():
+                alembicJobKwargs[k] = v
+            for k, v in kwargs.get('alembicJobArgs', list()):
+                alembicJobArgs.append((k, v))
+            
             for c in cache:
+                jobKwargs = {}
+                jobArgs = []
                 if not isinstance(c, AlembicCache):
                     continue
-                alembicJobs.append(
-                    alembic_utils.createAbcExportMelJob(
-                        *c.alembicJobArgs, **c.alembicJobKwargs
-                    )
-                )
+                jobKwargs.update(c.alembicJobKwargs)
+                jobArgs.extend(c.alembicJobArgs)
+                jobKwargs.update(alembicJobKwargs)
+                jobArgs.extend(alembicJobArgs)
+                alembicJobs.append(alembic_utils.createAbcExportMelJob(*jobArgs, **jobKwargs))
             if alembicJobs:
                 self._preAlembicExport(cache, directory)
                 logger.debug('Batch abc export: jobs:\n\t{}'.format('\n\t'.join(alembicJobs)))
