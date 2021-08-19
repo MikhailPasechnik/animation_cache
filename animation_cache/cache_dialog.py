@@ -31,7 +31,7 @@ class CacheDialog(QtWidgets.QDialog):
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.Widget)
         self.tableColumns = ('Icon', 'Type', 'Name', 'Path')
         self._cache = []
-        self._settings = None
+        self._settings = None  # type: dict
 
         self.operationType = operationType
         self.cacheManager = cacheManager
@@ -44,18 +44,25 @@ class CacheDialog(QtWidgets.QDialog):
         self.refreshBtn.clicked.connect(self.refresh)
 
         settings = cacheManager.getDefaultSettings()
-
+        
+        qsettings = QtCore.QSettings("animation_cache")
         if self.operationType == 'export':
             self.cache = cache or []
             self.settings = settings
-
             self.doAllBtn.clicked.connect(self.doExport)
             self.doSelectedBtn.clicked.connect(lambda: self.doExport(self.getSelectedCache()))
             self.fStart.valueChanged.connect(lambda v: self._settings.__setitem__('fstart', v))
             self.fEnd.valueChanged.connect(lambda v: self._settings.__setitem__('fend', v))
-            self.samples.valueChanged.connect(lambda v: self._settings.__setitem__('samples', v))
+            self.samples.valueChanged.connect(
+                lambda v: (self._settings.__setitem__('samples', v), qsettings.setValue('samples', v)))
+            self.samples.setValue(float(qsettings.value('samples', self.samples.value())))
             self.padding.valueChanged.connect(lambda v: self._settings.__setitem__('padding', v))
-            for k, v in settings.items():
+            def extraSettingsCallback(v, k, t):
+                logger.debug('extraSettingsCallback: %s -> %s', k, t(v))
+                self._settings.setdefault('alembicJobKwargs', {})
+                self._settings['alembicJobKwargs'][k] = t(v)
+                qsettings.setValue(k, t(v))
+            for k, v in settings.get('alembicJobKwargs', {}).items():
                 if k in ('fstart', 'fend', 'samples', 'padding'):
                     continue
                 widgets = []
@@ -63,15 +70,18 @@ class CacheDialog(QtWidgets.QDialog):
                     widget = QtWidgets.QCheckBox(self.ui)
                     widget.setText(k)
                     widget.setObjectName(k)
-                    widget.setChecked(v)
-                    widget.stateChanged.connect(lambda s, kk=k: self._settings.__setitem__(kk, bool(s)))
+                    value = qsettings.value(k, v)
+                    if isinstance(value, str):
+                        value = True if value in ('true', 'True', '1') else False
+                    widget.setChecked(value)
+                    widget.stateChanged.connect(functools.partial(extraSettingsCallback, k=k, t=bool))
                     widgets.append(widget)
                 elif isinstance(v, float):
                     widget = QtWidgets.QDoubleSpinBox(self.ui)
-                    widget.setValue(v)
+                    widget.setValue(float(qsettings.value(k, v)))
                     widget.setSingleStep(0.5)
                     widget.setObjectName(k)
-                    widget.valueChanged.connect(lambda s, kk=k: self._settings.__setitem__(kk, float(s)))
+                    widget.valueChanged.connect(functools.partial(extraSettingsCallback, k=k, t=float))
                     label = QtWidgets.QLabel(self.ui)
                     label.setText(k)
                     widgets.extend([widget, label])
