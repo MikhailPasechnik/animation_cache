@@ -92,7 +92,7 @@ class MayaCacheManager(CacheManager, JsonCacheMixin):
         fend = fend if fend is not None else defaultFRange[1]
         result = super(MayaCacheManager, self).doExport(
             cache, directory, fstart, fend, samples, padding, operation, force,
-            batchAbcExport=True, **kwargs
+            batchAbcExport=batchAbcExport, **kwargs
         )
         self._writeJson(
             os.path.join(directory, dataFileName or animation_cache.DATA_FILE_NAME),

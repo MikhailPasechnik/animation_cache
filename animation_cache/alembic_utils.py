@@ -115,7 +115,7 @@ def createAbcExportMelJob(*args, **kwargs):
         'melPostJobCallback', 'mpc',
         'melPerFrameCallback', 'mfc',
     ]
-    for k, v in list(args) + kwargs.items():
+    for k, v in list(args) + list(kwargs.items()):
         if k in ['root', 'rt']:
             if not isinstance(v, collections.Iterable):
                 v = [v]

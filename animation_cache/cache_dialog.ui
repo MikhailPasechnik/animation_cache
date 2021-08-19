@@ -88,33 +88,7 @@ QPushButton:pressed[accessibleName=&quot;normalBtn&quot;]{
        <property name="verticalSpacing">
         <number>2</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QLineEdit" name="directory">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="dragEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="readOnly">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="doSelectedBtn">
-         <property name="focusPolicy">
-          <enum>Qt::StrongFocus</enum>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string>Export Selected</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
         <widget class="QPushButton" name="browseBtn">
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
@@ -127,7 +101,77 @@ QPushButton:pressed[accessibleName=&quot;normalBtn&quot;]{
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="doSelectedBtn">
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Export Selected</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
+        <widget class="QLineEdit" name="directory">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="doAllBtn">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="toolTip">
+          <string>Export all found cache</string>
+         </property>
+         <property name="accessibleName">
+          <string>alertBtn</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string>Export all</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="refreshBtn">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="accessibleName">
+          <string>normalBtn</string>
+         </property>
+         <property name="text">
+          <string>Refresh</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
         <layout class="QHBoxLayout" name="settingsLayout">
          <property name="spacing">
           <number>0</number>
@@ -283,50 +327,16 @@ QPushButton:pressed[accessibleName=&quot;normalBtn&quot;]{
          </item>
         </layout>
        </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="doAllBtn">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="toolTip">
-          <string>Export all found cache</string>
-         </property>
-         <property name="accessibleName">
-          <string>alertBtn</string>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string>Export all</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="refreshBtn">
-         <property name="minimumSize">
-          <size>
-           <width>70</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="accessibleName">
-          <string>normalBtn</string>
-         </property>
-         <property name="text">
-          <string>Refresh</string>
-         </property>
-        </widget>
-       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="extraSettings" stretch="0,0">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>4</number>
+       </property>
       </layout>
      </item>
      <item>

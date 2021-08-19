@@ -55,6 +55,29 @@ class CacheDialog(QtWidgets.QDialog):
             self.fEnd.valueChanged.connect(lambda v: self._settings.__setitem__('fend', v))
             self.samples.valueChanged.connect(lambda v: self._settings.__setitem__('samples', v))
             self.padding.valueChanged.connect(lambda v: self._settings.__setitem__('padding', v))
+            for k, v in settings.items():
+                if k in ('fstart', 'fend', 'samples', 'padding'):
+                    continue
+                widgets = []
+                if isinstance(v, bool):
+                    widget = QtWidgets.QCheckBox(self.ui)
+                    widget.setText(k)
+                    widget.setObjectName(k)
+                    widget.setChecked(v)
+                    widget.stateChanged.connect(lambda s, kk=k: self._settings.__setitem__(kk, bool(s)))
+                    widgets.append(widget)
+                elif isinstance(v, float):
+                    widget = QtWidgets.QDoubleSpinBox(self.ui)
+                    widget.setValue(v)
+                    widget.setSingleStep(0.5)
+                    widget.setObjectName(k)
+                    widget.valueChanged.connect(lambda s, kk=k: self._settings.__setitem__(kk, float(s)))
+                    label = QtWidgets.QLabel(self.ui)
+                    label.setText(k)
+                    widgets.extend([widget, label])
+
+                for widget in widgets:
+                    self.extraSettings.addWidget(widget)
 
         elif self.operationType == 'import':
             self.cache = cache or []
@@ -158,6 +181,7 @@ class CacheDialog(QtWidgets.QDialog):
         self.fEnd = self.ui.fEnd
         self.samples = self.ui.samples
         self.padding = self.ui.padding
+        self.extraSettings = self.ui.extraSettings  # type: QtWidgets.QLayout
 
         self.searchEdit = self.ui.searchEdit
         self.table = self.ui.table
@@ -214,8 +238,9 @@ class CacheDialog(QtWidgets.QDialog):
 
     def selectCacheDirectory(self):
         selected_directory = QtWidgets.QFileDialog.getExistingDirectory(
-            dir=self.directory.text(),
-            options=QtWidgets.QFileDialog.IgnoreMask
+            None,
+            '',
+            self.directory.text(),
         )
         if selected_directory != '':
             self.directory.setText(selected_directory.replace('\\', '/'))
