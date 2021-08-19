@@ -49,7 +49,7 @@ class CacheDialog(QtWidgets.QDialog):
         if self.operationType == 'export':
             self.cache = cache or []
             self.settings = settings
-            self.doAllBtn.clicked.connect(self.doExport)
+            self.doAllBtn.clicked.connect(lambda *_, **__: self.doExport())
             self.doSelectedBtn.clicked.connect(lambda: self.doExport(self.getSelectedCache()))
             self.fStart.valueChanged.connect(lambda v: self._settings.__setitem__('fstart', v))
             self.fEnd.valueChanged.connect(lambda v: self._settings.__setitem__('fend', v))
@@ -92,7 +92,7 @@ class CacheDialog(QtWidgets.QDialog):
         elif self.operationType == 'import':
             self.cache = cache or []
             self.settings = settings
-            self.doAllBtn.clicked.connect(self.doImport)
+            self.doAllBtn.clicked.connect(lambda *_, **__: self.doImport())
             self.doSelectedBtn.clicked.connect(lambda: self.doImport(self.getSelectedCache()))
 
         self.directory.textChanged.connect(self.onDirectoryChanged)
