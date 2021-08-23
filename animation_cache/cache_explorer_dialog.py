@@ -22,7 +22,6 @@ class SampleTreeWidgetItem(QTreeWidgetItem):
         :param prop: PropertyTreeWidgetItem object
         """
         super(SampleTreeWidgetItem, self).__init__(parent)
-        self.setWindowFlags(self.windowFlags() | Qt.Widget)
         self.property = prop
         self.sample = sample
 
@@ -122,14 +121,13 @@ class AlembicFileExplorer(QWidget):
 
     def __init__(self, parent=None):
         super(AlembicFileExplorer, self).__init__(parent=parent)
-        self.setWindowFlags(self.windowFlags() | Qt.Widget)
         self.gpuCache = None
         self.topLevelItems = []
         self.setAcceptDrops(True)
 
         self.setWindowTitle('Alembic File Explorer - drop file in window to begin.')
+        self.setWindowFlags(self.windowFlags() | Qt.Widget)
         self.setAttribute(Qt.WA_DeleteOnClose)
-        self.setWindowFlags(self.windowFlags())
         self.mainLayout = QGridLayout(self)
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
 
