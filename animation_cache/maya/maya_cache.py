@@ -156,13 +156,23 @@ class AlembicCache(Cache):
 
         # If not batch abc export do export in place
         if not kwargs.get('batchAbcExport'):
+            alembicJobKwargs = {}
+            alembicJobArgs = []
+            alembicJobKwargs.update(self.alembicJobKwargs)
+            alembicJobArgs.extend(self.alembicJobArgs)
+            for k, v in kwargs.get('alembicJobKwargs', dict()).items():
+                alembicJobKwargs[k] = v
+            for k, v in kwargs.get('alembicJobArgs', list()):
+                alembicJobArgs.append((k, v))
+
             alembicFile = os.path.join(directory, self.alembicFileName)
             d = os.path.dirname(alembicFile)
             if not os.path.isdir(d):
                 animation_cache.utils.makeDirs(d)
-            pm.mel.eval('AbcExport {}'.format(
+            pm.mel.eval('{} {}'.format(
+                kwargs.get('exportCommand', 'AbcExport'),
                 alembic_utils.createAbcExportMelJob(
-                    *self.alembicJobArgs, **self.alembicJobKwargs
+                    *alembicJobArgs, **alembicJobKwargs
                 )
             ))
             self['files'].append(alembicFile)
