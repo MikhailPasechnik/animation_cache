@@ -7,7 +7,6 @@ setuptools.setup(
     package_data={
         'animation_cache': [
             '*.ui', 'tests/resources/*.ma', 'tests/resources/*.abc',
-            'cache_explorer_dialog.py',
         ],
     },
     include_package_data=True,
