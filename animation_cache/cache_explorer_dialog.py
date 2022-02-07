@@ -227,10 +227,13 @@ class AlembicFileExplorer(QWidget):
 
     @staticmethod
     def getType(iObject):
-        if AbcGeom.IXform.matches(iObject.getMetaData()):
+        md = iObject.getMetaData()
+        if AbcGeom.IXform.matches(md):
             return 'Xform'
-        elif AbcGeom.IPolyMesh.matches(iObject.getMetaData()):
+        elif AbcGeom.IPolyMesh.matches(md):
             return 'PolyMesh'
+        elif AbcGeom.ICurves.matches(md):
+            return 'Curve'
         return ''
 
     @staticmethod

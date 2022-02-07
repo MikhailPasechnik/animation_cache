@@ -43,7 +43,6 @@ def listArchive(
         iType=None,
         hierarchyDepthLimit=None,
         regex=None,
-        match=True,
         longName=False,
         ignoreNamespace=False):
     """Query object from alembic archive
@@ -52,14 +51,13 @@ def listArchive(
     :param iType: alembic.AbcGeom.IPolyMesh or similar
     :param hierarchyDepthLimit: limits hierarchy depth search
     :param regex: regular expression to match with
-    :param match: used with regex and indicates filter out if match or not match
     :param longName: used with regex and indicates that match will be performed of long name
     :param ignoreNamespace: used with regex ignores namspaces while matching name
     :rtype: Iterator
     """
     top = archive.getTop()
 
-    stack = zip([0] * len(top.children), top.children)
+    stack = list(zip([0] * len(top.children), top.children))
     while stack:
         hierarchyDepth, obj = stack.pop(0)
 
@@ -76,7 +74,7 @@ def listArchive(
                 matchName = obj.getFullName()
                 if ignoreNamespace:
                     matchName = '/' + '/'.join([n.split(':')[-1] for n in matchName.split('/')])
-            regexMatch = (not match and not re.match(regex, matchName))
+            regexMatch = bool(re.match(regex, matchName))
         else:
             regexMatch = True
 
