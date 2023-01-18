@@ -128,7 +128,7 @@ class MayaCacheManager(CacheManager, JsonCacheMixin):
             if alembicJobs:
                 self._preAlembicExport(cache, directory)
                 logger.debug('Batch abc export: jobs:\n\t{}'.format('\n\t'.join(alembicJobs)))
-                pm.mel.eval('{} {}'.format(kwargs.get('exportCommand', 'AbcExport'), ' '.join(alembicJobs)))
+                mm.eval('{} {}'.format(kwargs.get('exportCommand', 'AbcExport'), ' '.join(alembicJobs)))
                 self._postAlembicExport(cache, directory)
 
         return result

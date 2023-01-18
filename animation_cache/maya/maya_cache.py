@@ -22,6 +22,7 @@ import collections
 
 import maya.cmds as mc
 import pymel.core as pm
+import maya.mel as mm
 from alembic import Abc, AbcGeom
 
 import animation_cache
@@ -169,7 +170,7 @@ class AlembicCache(Cache):
             d = os.path.dirname(alembicFile)
             if not os.path.isdir(d):
                 animation_cache.utils.makeDirs(d)
-            pm.mel.eval('{} {}'.format(
+            mm.eval('{} {}'.format(
                 kwargs.get('exportCommand', 'AbcExport'),
                 alembic_utils.createAbcExportMelJob(
                     *alembicJobArgs, **alembicJobKwargs
