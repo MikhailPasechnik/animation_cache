@@ -76,6 +76,7 @@ class CacheDialog(QtWidgets.QDialog):
                     widget.setChecked(value)
                     widget.stateChanged.connect(functools.partial(extraSettingsCallback, k=k, t=bool))
                     widgets.append(widget)
+                    self._settings['alembicJobKwargs'][k] = value
                 elif isinstance(v, float):
                     widget = QtWidgets.QDoubleSpinBox(self.ui)
                     widget.setValue(float(qsettings.value(k, v)))
